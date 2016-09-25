@@ -1,15 +1,17 @@
 FROM soriyath/debian-nodejsmongodb:4
 MAINTAINER Sumi Straessle
 
-RUN DEBIAN_FRONTEND=noninteractive set -ex \
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN set -ex \
 	&& apt-get update \
 	&& apt-get -y install curl
 
-RUN DEBIAN_FRONTEND=noninteractive set -ex \
+RUN set -ex \
 	&& curl https://install.meteor.com/ | sh
 
 # CLEANUP
-RUN DEBIAN_FRONTEND=noninteractive apt-get clean \
+RUN apt-get clean \
 	&& apt-get autoremove \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -18,4 +20,5 @@ WORKDIR /srv/www
 
 EXPOSE 27017 28017 3000
 
-CMD service mongodb start
+# default command
+CMD ["supervisord", "-c", "/etc/supervisor.conf"]

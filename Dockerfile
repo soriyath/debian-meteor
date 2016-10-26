@@ -7,6 +7,12 @@ RUN set -ex \
 	&& apt-get update \
 	&& apt-get -y install curl
 
+# Switch to shell-less non-root user
+RUN useradd --home=/home/meteor --shell=/bin/bash meteor \
+	&& usermod -L meteor \
+	&& usermod -a -G www-data meteor
+USER meteor
+
 RUN set -ex \
 	&& curl https://install.meteor.com/ | sh
 

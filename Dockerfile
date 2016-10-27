@@ -8,13 +8,19 @@ RUN set -ex \
 	&& apt-get -y install curl
 
 # Switch to shell-less non-root user
-RUN useradd --home=/home/meteor --shell=/bin/bash meteor \
+RUN mkdir -p /usr/local/src/meteor \
+	&& useradd --home=/usr/local/src/meteor --shell=/bin/bash meteor \
 	&& usermod -L meteor \
-	&& usermod -a -G www-data meteor
+	&& usermod -a -G www-data meteor \
+	&& chown meteor:www-data /usr/local/src/meteor
 USER meteor
+
+ENV HOME /usr/local/src/meteor
 
 RUN set -ex \
 	&& curl https://install.meteor.com/ | sh
+USER root
+RUN cp "/usr/local/src/meteor/.meteor/packages/meteor-tool/1.4.2/mt-os.linux.x86_64/scripts/admin/launch-meteor" /usr/bin/meteor
 
 # CLEANUP
 RUN apt-get clean \
@@ -22,7 +28,11 @@ RUN apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ADD mongodb.conf $ROOTFS/etc/mongodb.conf
-WORKDIR /srv/www
+
+RUN mkdir /srv/app \
+	&& chown meteor:www-data /srv/app
+USER meteor
+WORKDIR /srv/app
 
 EXPOSE 27017 28017 3000
 

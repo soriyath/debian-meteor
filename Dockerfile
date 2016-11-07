@@ -28,7 +28,7 @@ RUN apt-get clean \
 	&& apt-get autoremove \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN mkdir /srv/app \
+RUN mkdir -p /srv/app \
 	&& chown meteor:www-data /srv/app
 USER meteor
 WORKDIR /srv/app

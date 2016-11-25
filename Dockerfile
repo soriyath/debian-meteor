@@ -2,7 +2,7 @@ FROM soriyath/debian-nodejs:4
 MAINTAINER Sumi Straessle
 
 ENV DEBIAN_FRONTEND noninteractive
-ENV VERSION 1.4.2_1
+ENV VERSION 1.4.2_3
 
 RUN set -ex \
 	&& apt-get update \
@@ -21,7 +21,7 @@ ENV HOME /usr/local/src/meteor
 RUN set -ex \
 	&& curl https://install.meteor.com/ | sh
 USER root
-RUN cp "/usr/local/src/meteor/.meteor/packages/meteor-tool/${VERSION}/mt-os.linux.x86_64/scripts/admin/launch-meteor" /usr/bin/meteor
+RUN update-alternatives --install /usr/bin/meteor meteor "/usr/local/src/meteor/.meteor/packages/meteor-tool/${VERSION}/mt-os.linux.x86_64/scripts/admin/launch-meteor" 1
 
 RUN apt-get upgrade -y
 

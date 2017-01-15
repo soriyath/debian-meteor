@@ -23,6 +23,10 @@ RUN set -ex \
 USER root
 RUN update-alternatives --install /usr/bin/meteor meteor "/usr/local/src/meteor/.meteor/packages/meteor-tool/${VERSION}/mt-os.linux.x86_64/scripts/admin/launch-meteor" 1
 
+# ACL are not supported by AUFS which is standard Docker filesystem
+RUN chown root:www-data /var/log/supervisor \
+	&& chmod 774 /var/log/supervisor
+
 RUN apt-get upgrade -y
 
 RUN apt-get clean \

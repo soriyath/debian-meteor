@@ -13,7 +13,7 @@ RUN mkdir -p /usr/local/src/meteor \
 	&& useradd --home=/usr/local/src/meteor --shell=/bin/bash meteor \
 	&& usermod -L meteor \
 	&& usermod -a -G www-data meteor \
-	&& chown meteor:www-data /usr/local/src/meteor
+	&& chown -R meteor:www-data /usr/local/src/meteor
 
 # Allow user meteor to restart its supervisor app
 RUN bash -c 'echo "meteor ALL = (root) NOPASSWD:/usr/bin/supervisorctl restart webapp, /srv/app/" | (EDITOR="tee -a" visudo)'

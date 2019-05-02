@@ -2,7 +2,7 @@ FROM soriyath/debian-nodejs:8
 MAINTAINER Sumi Straessle
 
 ENV DEBIAN_FRONTEND noninteractive
-ENV VERSION 1.4.2_7
+ENV VERSION 1.8.1
 
 RUN set -ex \
 	&& apt-get update \
